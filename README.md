@@ -41,5 +41,6 @@ Notebooks are located in [notebooks folder](notebooks).
 * train.py & generate.py scripts
 * Research for best combination of hyperparameters for Generator & Discriminator
 * Figure out with generation for 128 x 128 images
+* Augmnetations using Pytorch random rotation & mirror
 * Try to use STYLEGAN (Currently unavailable due unavailability of GPU)
 * Keep frog wet
