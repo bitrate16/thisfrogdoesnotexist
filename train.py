@@ -15,10 +15,11 @@ if __name__ == '__main__':
 	from IPython.display import display
 	from PIL import Image
 	import time
+	from tqdm import tqdm
 
 
 	# Dataset location & load options
-	dataroot = 'data-64'
+	dataroot = 'rot-tdata-64'
 	classes  = 'frogs'
 	workers  = 8
 
@@ -304,11 +305,12 @@ if __name__ == '__main__':
 	netG.train()
 	netD.train()
 
-	for epoch in range(niter):
+	for epoch in tqdm(range(niter), desc='iter'):
 		# Decay noise depending on iterations count
 		noiseStdCurrent = noiseStd + (noiseStdFinal - noiseStd) / (niter - epoch)
+		iter = 0
 
-		for i, data in enumerate(dataloader, 0):
+		for data in tqdm(dataloader, desc='iter', leave=False):
 			############################
 			# (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
 			###########################
@@ -357,25 +359,27 @@ if __name__ == '__main__':
 			D_G_z2 = output.mean().item()
 			optimizerG.step()
 
-			print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f' % (epoch, niter, i, len(dataloader), errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
+			# print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f' % (epoch, niter, iter, len(dataloader), errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
 			
 			# Snap batches
-			if i % model_snap == 0:
+			if iter % model_snap == 0:
 				if snap_model:
-					torch.save(netG, f'{outf}/models/netG_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{i}.pth')
-					torch.save(netD, f'{outf}/models/netD_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{i}.pth')
+					torch.save(netG, f'{outf}/models/netG_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{iter}.pth')
+					torch.save(netD, f'{outf}/models/netD_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{iter}.pth')
 				if snap_state_dict:
-					torch.save(netG.state_dict(), f'{outf}/states/netG_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{i}.pth')
-					torch.save(netD.state_dict(), f'{outf}/states/netD_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{i}.pth')
+					torch.save(netG.state_dict(), f'{outf}/states/netG_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{iter}.pth')
+					torch.save(netD.state_dict(), f'{outf}/states/netD_res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{iter}.pth')
 			
-			if i % image_snap == 0:
+			if iter % image_snap == 0:
 				netG.eval()
 				netD.eval()
 				vutils.save_image(real_cpu, f'{outf}/images/res_{imageSize}_seed_{seed}.png', normalize=True)
 				fake = netG(fixed_noise).cpu()
-				vutils.save_image(fake.detach(), f'{outf}/images/res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{i}.png', normalize=True)
+				vutils.save_image(fake.detach(), f'{outf}/images/res_{imageSize}_seed_{seed}_epoch_{epoch}_iter_{iter}.png', normalize=True)
 				netG.train()
 				netD.train()
+			
+			iter += 1
 		
 		# Snap epochs
 		if epoch % model_snap_epoch == 0:

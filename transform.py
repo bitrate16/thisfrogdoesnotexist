@@ -10,7 +10,7 @@ import colorsys
 NUM_WORKERS = 8
 
 # Path to images
-IMAGES_PATHS = [ 'data-64/frogs' ]
+IMAGES_PATHS = [ 'data-256/frogs' ]
 
 # Define allowed transformations
 ROTATIONS = [ -45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45 ]
@@ -19,6 +19,7 @@ HSV_SHIFTS = [ 0 ]
 # Output size (size x size)
 OUTPUT_SIZE = 64
 OUTPUT_RESAMPLE = Image.BICUBIC
+OUTPUT = 'tdata-64/frogs'
 
 # Delete all transformed images, but keep originals
 CLEANUP = False
@@ -57,10 +58,11 @@ def rotate_image(image, angle):
 	return bg
 
 # Process single image file
-def process_image(file):
+def process_image(args):
+	file, dstfile = args
 	print(f'Transform {file}')
 		
-	no_ext_file = file.split('.png')[0]
+	no_ext_file = dstfile.split('.png')[0]
 
 	if '-transformed' in file:
 		if CLEANUP:
@@ -71,25 +73,26 @@ def process_image(file):
 	if CLEANUP:
 		return
 
-	image = Image.open(file).convert('RGBA')
-	image.convert('RGB').save(file)
+	try:
+		image = Image.open(file).convert('RGBA')
+		image.convert('RGB').save(file)
 
-	for flip in [ False, True ]:
-		image_flip = mirror_image(image) if flip else image
-		
-		for rot in ROTATIONS:
-			image_rot = image_flip.copy() if rot == 0 else rotate_image(image_flip, rot)
+		for flip in [ False, True ]:
+			image_flip = mirror_image(image) if flip else image
+			
+			for rot in ROTATIONS:
+				image_rot = image_flip.copy() if rot == 0 else rotate_image(image_flip, rot)
 
-			for hsv in HSV_SHIFTS:
-				# No save because equal to original
-				if (not flip) and (rot == 0) and (hsv == 0):
-					continue
-				
-				image_hsv = image_rot.copy() if hsv == 0 else shift_hsv(image_rot, hsv)
-				
-				image_hsv = image_hsv.convert('RGB').resize((OUTPUT_SIZE, OUTPUT_SIZE), resample=OUTPUT_RESAMPLE)
-				
-				image_hsv.save(f'{no_ext_file}_{flip}_{rot}_{hsv}-transformed.png')
+				for hsv in HSV_SHIFTS:
+					# # No save because equal to original
+					# if (not flip) and (rot == 0) and (hsv == 0):
+					# 	continue
+					
+						image_hsv = image_rot.copy() if hsv == 0 else shift_hsv(image_rot, hsv)					
+						image_hsv = image_hsv.convert('RGB').resize((OUTPUT_SIZE, OUTPUT_SIZE), resample=OUTPUT_RESAMPLE)
+						image_hsv.save(f'{no_ext_file}_{flip}_{rot}_{hsv}-transformed.png')
+	except:
+		print(f'FAIL: {file}')
 
 
 if __name__ == '__main__':
@@ -98,7 +101,9 @@ if __name__ == '__main__':
 	for IMAGES_PATH in IMAGES_PATHS:
 		dir_files = list(os.listdir(IMAGES_PATH))
 		for file in dir_files:
-			files.append(f'{IMAGES_PATH}/{file}')
-
+			files.append((f'{IMAGES_PATH}/{file}', f'{OUTPUT}/{file}'))
+	
+	os.makedirs(OUTPUT, exist_ok=True)
+	
 	pool = Pool(NUM_WORKERS)
 	pool.map(process_image, files)
