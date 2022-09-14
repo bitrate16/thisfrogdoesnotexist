@@ -10,10 +10,10 @@ import colorsys
 NUM_WORKERS = 8
 
 # Path to images
-IMAGES_PATHS = [ 'data-128/frogs' ]
+IMAGES_PATHS = [ 'data-64/frogs' ]
 
 # Define allowed transformations
-ROTATIONS = [ -45, -30, -15, 0, 15, 30, 45 ]
+ROTATIONS = [ -45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45 ]
 HSV_SHIFTS = [ 0 ]
 
 # Output size (size x size)
