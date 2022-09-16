@@ -13,13 +13,13 @@ NUM_WORKERS = 8
 IMAGES_PATHS = [ 'data-256/frogs' ]
 
 # Define allowed transformations
-ROTATIONS = [ -45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45 ]
+ROTATIONS = [ 0 ] # [ -45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45 ]
 HSV_SHIFTS = [ 0 ]
 
 # Output size (size x size)
 OUTPUT_SIZE = 128
 OUTPUT_RESAMPLE = Image.BICUBIC
-OUTPUT = 'tdata-128/frogs'
+OUTPUT = 'no-tdata-128/frogs'
 
 # Delete all transformed images, but keep originals
 CLEANUP = False

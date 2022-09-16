@@ -14,14 +14,14 @@ if __name__ == '__main__':
 	from tqdm import tqdm
 
 	# direccion del directorio de entrenamiento
-	dataroot = "tdata-128"
+	dataroot = "no-tdata-128"
 
 	# Output folder for snapshots
-	outf = 'result-128'
+	outf = 'no-result-128'
 
 	# Snapshot frequency (every $snap batches)
-	model_snap = 50
-	image_snap = 50
+	model_snap = 500
+	image_snap = 10
 
 	# Snapshot frequency (every $snap_epoch epochs)
 	model_snap_epoch = 1
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 	workers = 8
 
 	# Batch size during training
-	batch_size = 32
+	batch_size = 8
 
 	# Number of channels in the training images. For color images this is 3
 	nc = 3
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 	ndf = 32
 
 	# Number of training epochs
-	num_epochs = 20
+	num_epochs = 100
 
 	# Learning rate for optimizers
 	lr = 0.0002
