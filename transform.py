@@ -17,9 +17,9 @@ ROTATIONS = [ -45, -40, -35, -30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 
 HSV_SHIFTS = [ 0 ]
 
 # Output size (size x size)
-OUTPUT_SIZE = 64
+OUTPUT_SIZE = 128
 OUTPUT_RESAMPLE = Image.BICUBIC
-OUTPUT = 'tdata-64/frogs'
+OUTPUT = 'tdata-128/frogs'
 
 # Delete all transformed images, but keep originals
 CLEANUP = False

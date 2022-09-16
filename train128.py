@@ -14,7 +14,7 @@ if __name__ == '__main__':
 	from tqdm import tqdm
 
 	# direccion del directorio de entrenamiento
-	dataroot = "data-128"
+	dataroot = "tdata-128"
 
 	# Output folder for snapshots
 	outf = 'result-128'
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 	workers = 8
 
 	# Batch size during training
-	batch_size = 1
+	batch_size = 32
 
 	# Number of channels in the training images. For color images this is 3
 	nc = 3
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 	fake_label_max = 0.0
 
 	# Number of GPUs available. Use 0 for CPU mode.
-	ngpu = 0
+	ngpu = 1
 	
 	# Checkpoint
 	netD_path = None
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 	# --------------------------------------------------------------------------
 	# --------------------------------------------------------------------------
 	
-	device = torch.device(f"cuda:{ ngpu }" if ngpu > 0 else "cpu")
+	device = torch.device(f"cuda:0" if ngpu > 0 else "cpu")
 
 	# Prepare for options
 	try:
@@ -182,7 +182,7 @@ if __name__ == '__main__':
 				# state size. 1
 			)
 		def forward(self, input):
-			return self.main(input)
+			return self.main(input).view(-1, 1).squeeze(1)
 	
 	if netD_path is not None:
 		print("Loading netD")
@@ -208,9 +208,14 @@ if __name__ == '__main__':
 	optimizerD = optim.Adam(netD.parameters(), lr=lr, betas=(beta1, 0.999)) # SGD(netD.parameters(), lr=lr)
 	optimizerG = optim.Adam(netG.parameters(), lr=lr, betas=(beta1, 0.999))
 	
+	netG.to(device)
+	netD.to(device)
+	netG.train()
+	netD.train()
+	
 	for epoch in tqdm(range(num_epochs), desc='iter'):
 		# Decay noise depending on iterations count
-		noiseStdCurrent = noiseStd + (noiseStdFinal - noiseStd) / (1.0 - num_epochs / (num_epochs - epoch))
+		noiseStdCurrent = noiseStd + (noiseStdFinal - noiseStd) * (1.0 - epoch / num_epochs)
 		iter = 0
 
 		for data in tqdm(dataloader, desc='iter', leave=False):
