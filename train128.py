@@ -1,4 +1,7 @@
 
+from configparser import Interpolation
+
+
 if __name__ == '__main__':
 	
 	import os
@@ -17,11 +20,11 @@ if __name__ == '__main__':
 	dataroot = "no-tdata-128"
 
 	# Output folder for snapshots
-	outf = 'no-result-128'
+	outf = 'no-result-128-8'
 
 	# Snapshot frequency (every $snap batches)
-	model_snap = 500
-	image_snap = 10
+	model_snap = 1000
+	image_snap = 1
 
 	# Snapshot frequency (every $snap_epoch epochs)
 	model_snap_epoch = 1
@@ -35,7 +38,7 @@ if __name__ == '__main__':
 	workers = 8
 
 	# Batch size during training
-	batch_size = 8
+	batch_size = 2
 
 	# Number of channels in the training images. For color images this is 3
 	nc = 3
@@ -63,12 +66,12 @@ if __name__ == '__main__':
 	noiseStdFinal = 0.0
 
 	# Real labels range
-	real_label_min = 1.0
+	real_label_min = 0.9
 	real_label_max = 1.0
 
 	# Fake labels range
 	fake_label_min = 0.0
-	fake_label_max = 0.0
+	fake_label_max = 0.1
 
 	# Number of GPUs available. Use 0 for CPU mode.
 	ngpu = 1
@@ -78,7 +81,7 @@ if __name__ == '__main__':
 	netG_path = None
 
 	# Generators seed
-	seed = 101
+	seed = 9724
 	
 	# --------------------------------------------------------------------------
 	# --------------------------------------------------------------------------
@@ -106,6 +109,8 @@ if __name__ == '__main__':
 
 	dataset = dset.ImageFolder(root=dataroot,
 		transform=transforms.Compose([
+			transforms.RandomRotation((-15, +15), transforms.InterpolationMode.BICUBIC, True, fill=(255,255,255)),
+			transforms.RandomHorizontalFlip(),
 			transforms.Resize(128),
 			transforms.CenterCrop(128),
 			transforms.ToTensor(),
@@ -188,7 +193,7 @@ if __name__ == '__main__':
 		print("Loading netD")
 		netD = torch.load(netD_path)
 	else:
-		print("Loading netG")
+		print("Creating netG")
 		netD = Discriminator(ngpu)
 	
 	if netG_path is not None:
@@ -213,9 +218,9 @@ if __name__ == '__main__':
 	netG.train()
 	netD.train()
 	
-	for epoch in tqdm(range(num_epochs), desc='iter'):
+	for epoch in tqdm(range(num_epochs), desc='epoch'):
 		# Decay noise depending on iterations count
-		noiseStdCurrent = noiseStd + (noiseStdFinal - noiseStd) * (1.0 - epoch / num_epochs)
+		noiseStdCurrent = noiseStdFinal + (noiseStd - noiseStdFinal) * (1.0 - epoch / num_epochs)
 		iter = 0
 
 		for data in tqdm(dataloader, desc='iter', leave=False):
