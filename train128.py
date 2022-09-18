@@ -17,13 +17,13 @@ if __name__ == '__main__':
 	from tqdm import tqdm
 
 	# direccion del directorio de entrenamiento
-	dataroot = "no-tdata-128"
+	dataroot = "no-data-128"
 
 	# Output folder for snapshots
-	outf = 'no-result-128-8'
+	outf = 'no-result-128-b-2'
 
 	# Snapshot frequency (every $snap batches)
-	model_snap = 1000
+	model_snap = 20
 	image_snap = 1
 
 	# Snapshot frequency (every $snap_epoch epochs)
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 	workers = 8
 
 	# Batch size during training
-	batch_size = 2
+	batch_size = 64
 
 	# Number of channels in the training images. For color images this is 3
 	nc = 3
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 	num_epochs = 100
 
 	# Learning rate for optimizers
-	lr = 0.0002
+	lr = 0.00002
 
 	# Beta1 hyperparam for Adam optimizers
 	beta1 = 0.5
@@ -77,11 +77,11 @@ if __name__ == '__main__':
 	ngpu = 1
 	
 	# Checkpoint
-	netD_path = None
-	netG_path = None
+	netD_path = 'no-result-128-b/models/netD_res_128_seed_17943_final.pth'
+	netG_path = 'no-result-128-b/models/netG_res_128_seed_17943_final.pth'
 
 	# Generators seed
-	seed = 9724
+	seed = 17943
 	
 	# --------------------------------------------------------------------------
 	# --------------------------------------------------------------------------
@@ -198,7 +198,7 @@ if __name__ == '__main__':
 	
 	if netG_path is not None:
 		print("Loading netG")
-		netD = torch.load(netG_path)
+		netG = torch.load(netG_path)
 	else:
 		print("Creating netG")
 		netG = Generator(ngpu)
