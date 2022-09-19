@@ -39,3 +39,11 @@ This model was trained with the following parameters:
 ### Sample:
 
 ![Sample 64 x 64](64x64-seed-127423-epoch-50-batch-128-lr-0.0001/sample.png)
+
+## Frogs 128 x 128 v1 [Model](128x128-i-forgot)
+
+This model was retrained many times and i forgot the pipeline
+
+### Sample:
+
+![Sample 128 x 128](128x128-i-forgot/sample.png)

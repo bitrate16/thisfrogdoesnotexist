@@ -20,11 +20,11 @@ if __name__ == '__main__':
 	dataroot = "no-data-128"
 
 	# Output folder for snapshots
-	outf = 'no-result-128-b-2'
+	outf = 'no-result-128-b-3'
 
 	# Snapshot frequency (every $snap batches)
-	model_snap = 20
-	image_snap = 1
+	model_snap = 1000
+	image_snap = 5
 
 	# Snapshot frequency (every $snap_epoch epochs)
 	model_snap_epoch = 1
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 	workers = 8
 
 	# Batch size during training
-	batch_size = 64
+	batch_size = 1
 
 	# Number of channels in the training images. For color images this is 3
 	nc = 3
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 	num_epochs = 100
 
 	# Learning rate for optimizers
-	lr = 0.00002
+	lr = 0.000001
 
 	# Beta1 hyperparam for Adam optimizers
 	beta1 = 0.5
@@ -66,19 +66,19 @@ if __name__ == '__main__':
 	noiseStdFinal = 0.0
 
 	# Real labels range
-	real_label_min = 0.9
-	real_label_max = 1.0
+	real_label_min = 1.0
+	real_label_max = 1.25
 
 	# Fake labels range
-	fake_label_min = 0.0
-	fake_label_max = 0.1
+	fake_label_min = -0.25
+	fake_label_max = 0.0
 
 	# Number of GPUs available. Use 0 for CPU mode.
 	ngpu = 1
 	
 	# Checkpoint
-	netD_path = 'no-result-128-b/models/netD_res_128_seed_17943_final.pth'
-	netG_path = 'no-result-128-b/models/netG_res_128_seed_17943_final.pth'
+	netD_path = 'no-result-128-b-2/models/netD_res_128_seed_17943_final.pth'
+	netG_path = 'no-result-128-b-2/models/netG_res_128_seed_17943_final.pth'
 
 	# Generators seed
 	seed = 17943
