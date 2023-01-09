@@ -47,3 +47,12 @@ This model was retrained many times and i forgot the pipeline
 ### Sample:
 
 ![Sample 128 x 128](128x128-i-forgot/sample.png)
+
+
+## Frogs 128 x 128 v1 [Model](stylegan2-ada-512)
+
+Trained on 512xc512 images
+
+### Sample:
+
+![Sample many x many](stylegan2-ada-512/sample.png)

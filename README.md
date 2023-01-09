@@ -42,5 +42,15 @@ Notebooks are located in [notebooks folder](notebooks).
 * Research for best combination of hyperparameters for Generator & Discriminator
 * Figure out with generation for 128 x 128 images
 * Augmentations using Pytorch random rotation & mirror
-* Try to use STYLEGAN (Currently unavailable due unavailability of GPU)
+* ~~Try to use STYLEGAN (Currently unavailable due unavailability of GPU)~~
 * Keep frog wet
+
+
+## stylegan2-ada based froads
+
+[stylegan2-ada repo](https://github.com/NVlabs/stylegan2-ada)
+
+Just take model from [models folder](models) and generate with `stylegan2-ada/generate.py`
+
+Generate with:
+`python generate.py --network network-snapshot-001048.pkl --outdir generated --seeds 1-1000`
